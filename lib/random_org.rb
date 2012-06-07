@@ -1,15 +1,21 @@
 require "rubygems"
 require 'httparty'
-require File.join(File.dirname(File.expand_path(__FILE__)), "version.rb")
+
+# require services
+%w(integer).each do |file|
+  require File.join(File.dirname(File.expand_path(__FILE__)), "#{file}.rb")
+end
+
 
 module RandomOrg
-  module VERSION
+  module Services; end
+  module Version
     MAGOR = 0
     MINOR = 2
     PATCH = 1
     FULL  = "#{MAGOR}.#{MINOR}.#{PATCH}"
   end
-
+  
   class AbstractRandom
     include HTTParty
     base_uri 'http://www.random.org/'
@@ -27,10 +33,26 @@ module RandomOrg
     
   end
 
+
+  Services.constants.each do |service_name|
+    service = Services.const_get(service_name)
+    kls = Class.new(AbstractRandom) 
+    kls.send(:extend, service)
+    kls.instance_eval { |_klass|
+      parser service::PARSER
+      base_uri(base_uri+service::RELATIVE_URL)
+      
+      alias :get_original :get
+      
+      def get(query = {})
+        get_original("/", :query => query)
+      end
+      
+    }
+    const_set service_name, kls
+  end
+  remove_const("Services")
 end
 
-require File.join(File.dirname(File.expand_path(__FILE__)), "integer.rb")
 
-p RandomOrg::Integer.sequence
-p RandomOrg::Integer.next
-p RandomOrg::Integer.next(:base => 8)
+

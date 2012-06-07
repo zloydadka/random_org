@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.8.7'
 
   s.author      = "Alexandr Andrianov"
-  s.homepage    = 'https://github.com/zloydadka/random-org'
+  s.homepage    = 'https://github.com/zloydadka/random_org'
   s.files       = `git ls-files`.split("\n")
   s.test_files  = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.require_path = 'lib'

@@ -1,15 +1,15 @@
 module RandomOrg
-  class Integer < AbstractRandom
-    parser Proc.new { |body, format| body.split(/\s/).map &:to_i }
-    class << self
+  module Services
+    module Integer
+      PARSER = Proc.new { |body, format| body.split(/\s/).map &:to_i }
+      RELATIVE_URL = "/integers"
+      
       def next(options = {})
         sequence(options.merge({:num => 1})).first
       end
 
       def sequence(options = {})
-        permanent_options = {
-          :format => :plain
-        }
+        permanent_options = { :format => :plain }
         query = {
           :min => 1,
           :max => 100,
@@ -20,9 +20,10 @@ module RandomOrg
 
         validate(query[:base], [2,8,10,16])
 
-        response = self.get("/integers/", :query => query)
+        response = get(query)
         raise "Error: #{response.code}" if response.code != 200
         response.parsed_response
+
       end
     end
   end
