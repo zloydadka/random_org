@@ -1,14 +1,12 @@
 require "rubygems"
 require 'httparty'
 
-# require services
-%w(integer).each do |file|
-  require File.join(File.dirname(File.expand_path(__FILE__)), "#{file}.rb")
-end
-
 
 module RandomOrg
   module Services; end
+
+  Dir[File.join(File.dirname(File.expand_path(__FILE__)), "services", "*.rb")].each { |file| load file }
+
   module Version
     MAGOR = 0
     MINOR = 2

@@ -1,6 +1,4 @@
-module RandomOrg
-  module Services
-    module Integer
+module RandomOrg::Services::Integer
       PARSER = Proc.new { |body, format| body.split(/\s/).map &:to_i }
       RELATIVE_URL = "/integers"
       
@@ -25,6 +23,4 @@ module RandomOrg
         response.parsed_response
 
       end
-    end
-  end
 end
