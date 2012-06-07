@@ -1,0 +1,3 @@
+module RandomOrg
+
+end
